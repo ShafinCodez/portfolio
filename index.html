@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shafin S | Webflow Developer Portfolio</title>
+    
+    <!-- SEO & Meta Tags (Example) -->
+    <meta name="description" content="Expert Webflow developer creating high-performance, visually stunning websites with a modern, professional aesthetic.">
+    <meta name="keywords" content="Webflow Developer, Portfolio, Web Design, Frontend Development, GSAP, Animations">
+    
+    <!-- PWA Manifest & Icons (Example) -->
+    <link rel="manifest" href="data:application/json;charset=utf-8,{&quot;name&quot;:&quot;Shafin S - Webflow Developer Portfolio&quot;,&quot;short_name&quot;:&quot;SS Portfolio&quot;,&quot;start_url&quot;:&quot;.&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#0F0F0F&quot;,&quot;theme_color&quot;:&quot;#821ee7&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;icon.png&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/png&quot;}]}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    
+    <!-- Google Fonts for Theme -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- main.css --- */
+        :root {
+            --primary-purple: #821ee7;
+            --accent-purple: #9373FF;
+            --deep-black: #0F0F0F;
+            --charcoal-gray: #1C1C1E;
+            --light-gray-text: #D9D9D9;
+            --soft-white: #F5F5F5;
+            --electric-blue-accent: #18A0FB;
+            --error-red: #FF4F64;
+            --subtle-border: #2A2A2A;
+
+            --primary-glow: var(--primary-purple);
+            --secondary-glow: var(--accent-purple);
+            --text-primary: var(--soft-white);
+            --text-secondary: var(--light-gray-text);
+            --bg-gradient-start: var(--deep-black);
+            --bg-gradient-end: var(--charcoal-gray);
+            
+            --font-primary: 'Orbitron', sans-serif;
+            --font-secondary: 'Rajdhani', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            background-size: 200% 200%;
+            animation: gradient-animation 20s ease infinite;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .glassmorphism {
+            background: rgba(28, 28, 30, 0.5); /* #1C1C1E with alpha */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--subtle-border);
+        }
+
+        .content-section {
+            padding: 100px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* --- components.css --- */
+        .cta-button {
+            position: relative; padding: 1rem 2rem; border: 2px solid var(--primary-glow);
+            color: var(--text-primary); background: transparent; cursor: pointer;
+            overflow: hidden; transition: all 0.4s ease; text-transform: uppercase;
+            font-weight: 600; letter-spacing: 1.5px; z-index: 1; text-decoration: none;
+            display: inline-block;
+            text-shadow: 0 0 5px var(--primary-glow);
+        }
+        .cta-button .glow {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 0; height: 0; background: var(--primary-glow); border-radius: 50%;
+            opacity: 0.7; transition: width 0.4s ease, height 0.4s ease; z-index: -1;
+        }
+        .cta-button:hover { 
+            color: var(--soft-white); 
+            background-color: var(--primary-glow); 
+            box-shadow: 0 0 25px var(--primary-glow), 0 0 50px var(--primary-glow);
+            text-shadow: none;
+        }
+        .cta-button:hover .glow { width: 250px; height: 250px; }
+
+        .section-title { font-family: var(--font-primary); font-size: clamp(2rem, 6vw, 3rem); color: var(--text-primary); margin-bottom: 2rem; text-align: center; }
+        .section-subtitle { text-align: center; max-width: 600px; margin: -1.5rem auto 3rem auto; color: var(--text-secondary); line-height: 1.6; }
+
+        .main-header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; padding: 1rem 5%; }
+        .main-nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-primary); font-size: 1.5rem; font-weight: 700; color: var(--text-primary); text-decoration: none; z-index: 10; }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; transition: color 0.3s, text-shadow 0.3s; }
+        .nav-links a:hover { color: var(--primary-glow); text-shadow: 0 0 8px var(--primary-glow); }
+        .cta-button-small { border-width: 1px; padding: 0.5rem 1rem; }
+        .nav-toggle { display: none; }
+        
+        .hero-section { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; position: relative; }
+        .hero-video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-color: #000; }
+        .hero-video { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); }
+        .hero-content { z-index: 1; }
+        .hero-title { font-family: var(--font-primary); font-size: clamp(3rem, 10vw, 6rem); font-weight: 900; margin: 0; letter-spacing: 2px; text-transform: uppercase; }
+        .hero-tagline { font-size: clamp(1rem, 4vw, 1.5rem); color: var(--text-secondary); margin: 1rem 0 2.5rem 0; }
+        .hero-title .line, .hero-tagline .line { display: block; overflow: hidden; }
+        .scroll-down-indicator { position: absolute; bottom: 2rem; color: var(--text-secondary); font-size: 0.8rem; letter-spacing: 3px; writing-mode: vertical-lr; opacity: 0.7; }
+
+        .about-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center; }
+        .subsection-title { margin-bottom: 1.5rem; color: var(--primary-glow); font-family: var(--font-primary); text-shadow: 0 0 10px var(--primary-glow); }
+        .skills-container .skill { margin-bottom: 1rem; }
+        .skill-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .skill-bar { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+        .skill-level { height: 100%; background: linear-gradient(90deg, var(--secondary-glow), var(--primary-glow)); border-radius: 4px; width: 0; box-shadow: 0 0 15px var(--primary-glow); }
+
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .service-card { padding: 2rem; border: 1px solid var(--subtle-border); background: var(--charcoal-gray); border-radius: 10px; transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
+        .service-card:hover { transform: translateY(-10px); border-color: var(--secondary-glow); box-shadow: 0 0 20px rgba(147, 115, 255, 0.3); }
+        .service-card h3 { font-family: var(--font-primary); color: var(--primary-glow); margin-top: 0; margin-bottom: 1rem; text-shadow: 0 0 8px var(--primary-glow); }
+
+        .portfolio-filter { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 3rem; }
+        .filter-btn { background: transparent; border: 1px solid var(--subtle-border); color: var(--text-secondary); padding: 0.5rem 1.5rem; border-radius: 20px; cursor: pointer; transition: all 0.3s; }
+        .filter-btn:hover { background: rgba(130, 30, 231, 0.1); color: var(--primary-glow); }
+        .filter-btn.active { background: var(--primary-glow); color: var(--deep-black); border-color: var(--primary-glow); font-weight: 600; box-shadow: 0 0 15px var(--primary-glow); }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
+        .project-card { background: var(--charcoal-gray); border-radius: 10px; overflow: hidden; transform-style: preserve-3d; transition: transform 0.4s ease, box-shadow 0.4s ease; border: 1px solid var(--subtle-border); }
+        .project-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .project-card img { width: 100%; height: 220px; object-fit: cover; display: block; transition: transform 0.4s; }
+        .project-card:hover img { transform: scale(1.05); }
+        .project-info { padding: 1.5rem; }
+        .project-info h3 { font-family: var(--font-primary); margin-top: 0; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .project-info .project-tech { font-size: 0.9rem; color: var(--secondary-glow); margin-bottom: 1rem; font-weight: 600; text-shadow: 0 0 8px var(--secondary-glow); }
+        .project-links { margin-top: auto; }
+        .project-links a { margin-right: 1rem; text-decoration: none; font-weight: 600; transition: text-shadow 0.3s ease; }
+        .btn-live { color: var(--primary-glow); }
+        .btn-live:hover { text-shadow: 0 0 8px var(--primary-glow); }
+        .btn-case-study { color: var(--secondary-glow); }
+        .btn-case-study:hover { text-shadow: 0 0 8px var(--secondary-glow); }
+        
+        .testimonials-slider { }
+        .testimonial-card { padding: 2rem; text-align: center; border: 1px solid var(--subtle-border); border-radius: 10px; background: var(--charcoal-gray); }
+        .testimonial-card p { font-style: italic; margin-bottom: 1rem; line-height: 1.7; }
+        .testimonial-card .client-name { font-weight: 700; color: var(--primary-glow); text-shadow: 0 0 8px var(--primary-glow); }
+
+        .contact-form { max-width: 700px; margin: 0 auto; }
+        .form-group { position: relative; margin-bottom: 2.5rem; }
+        .form-group input, .form-group textarea {
+            width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--subtle-border);
+            padding: 10px 0; color: var(--text-primary); font-size: 1rem; font-family: var(--font-secondary);
+        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-bottom-color: var(--primary-glow); box-shadow: 0 2px 10px -2px var(--primary-glow); }
+        .form-group label { position: absolute; top: 10px; left: 0; color: var(--text-secondary); transition: all 0.3s; pointer-events: none; }
+        .form-group input:focus + label, .form-group input:valid + label,
+        .form-group textarea:focus + label, .form-group textarea:valid + label { top: -15px; font-size: 0.8rem; color: var(--primary-glow); text-shadow: 0 0 5px var(--primary-glow); }
+        .form-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+
+        .main-footer { padding: 2rem 5%; text-align: center; border-top: 1px solid var(--subtle-border); margin-top: 5rem; }
+        .footer-social { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem; }
+        .footer-social a { color: var(--text-secondary); text-decoration: none; transition: color 0.3s, text-shadow 0.3s; }
+        .footer-social a:hover { color: var(--primary-glow); text-shadow: 0 0 8px var(--primary-glow); }
+        
+        /* --- animations.css --- */
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .preloader {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000; z-index: 9999; display: grid; place-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .preloader.hidden { opacity: 0; pointer-events: none; }
+
+        .anim-fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .anim-fade-in.is-visible { opacity: 1; transform: translateY(0); }
+
+        .interactive-cursor {
+            position: fixed; width: 30px; height: 30px;
+            border: 2px solid var(--primary-glow);
+            border-radius: 50%; pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            border: 2px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 5px;
+        }
+
+        /* --- responsive.css --- */
+        @media (min-width: 769px) {
+            .about-grid { grid-template-columns: 2fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+                cursor: pointer;
+                z-index: 10;
+                width: 24px;
+                height: 20px;
+                position: relative;
+            }
+            .nav-toggle span {
+                display: block;
+                position: absolute;
+                height: 2px;
+                width: 100%;
+                background: var(--text-primary);
+                border-radius: 2px;
+                opacity: 1;
+                left: 0;
+                transform: rotate(0deg);
+                transition: .25s ease-in-out;
+            }
+            .nav-toggle span:nth-child(1) { top: 0px; }
+            .nav-toggle span:nth-child(2), .nav-toggle span:nth-child(3) { top: 8px; }
+            .nav-toggle span:nth-child(4) { top: 16px; }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: var(--deep-black);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                transform: translateX(100%);
+                transition: transform 0.5s ease-in-out;
+            }
+            .nav-links.active {
+                transform: translateX(0);
+            }
+            .nav-links a { font-size: 1.5rem; }
+
+            .nav-open .nav-toggle span:nth-child(1), .nav-open .nav-toggle span:nth-child(4) {
+                top: 8px; width: 0%; left: 50%;
+            }
+            .nav-open .nav-toggle span:nth-child(2) { transform: rotate(45deg); }
+            .nav-open .nav-toggle span:nth-child(3) { transform: rotate(-45deg); }
+        }
+        
+        /* Hide cursor on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            .interactive-cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preloader"></div>
+    <div class="interactive-cursor"></div>
+
+    <header class="main-header glassmorphism">
+        <nav class="main-nav">
+            <a href="#home" class="logo magnetic-element">SS</a>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about" class="magnetic-element">About</a></li>
+                <li><a href="#services" class="magnetic-element">Services</a></li>
+                <li><a href="#portfolio" class="magnetic-element">Work</a></li>
+                <li><a href="#contact" class="magnetic-element cta-button-small">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero-section">
+            <div class="hero-video-container">
+                 <video src="https://cdn.pixabay.com/video/2021/04/13/70432-540132331_large.mp4" autoplay muted loop class="hero-video" poster="https://placehold.co/1920x1080/0F0F0F/1C1C1E?text=Loading..."></video>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="line">Shafin S</span>
+                </h1>
+                <p class="hero-tagline">
+                    <span class="line">Webflow Developer Crafting</span>
+                    <span class="line">Digital Excellence.</span>
+                </p>
+                <a href="#portfolio" class="cta-button magnetic-element">
+                    Explore My Universe
+                    <span class="glow"></span>
+                </a>
+            </div>
+            <div class="scroll-down-indicator">SCROLL</div>
+        </section>
+
+        <section id="about" class="about-section content-section">
+            <div class="about-grid">
+                <div class="about-text anim-fade-in">
+                    <h2 class="section-title">Who I Am</h2>
+                    <p>I'm a passionate Webflow developer with a love for clean code, futuristic design, and flawless user experiences. I merge creative vision with technical precision to build websites that aren't just beautiful, but are powerful, high-performing assets for my clients.</p>
+                </div>
+                <div class="about-skills anim-fade-in">
+                    <h3 class="subsection-title">My Arsenal</h3>
+                    <div id="skills-container" class="skills-container"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="services" class="services-section content-section">
+            <h2 class="section-title anim-fade-in">What I Offer</h2>
+            <div id="services-container" class="services-grid anim-fade-in"></div>
+        </section>
+
+        <section id="portfolio" class="portfolio-section content-section">
+            <h2 class="section-title anim-fade-in">Featured Work</h2>
+            <div class="portfolio-filter anim-fade-in">
+                <button class="filter-btn active magnetic-element" data-filter="all">All</button>
+                <button class="filter-btn magnetic-element" data-filter="e-commerce">E-commerce</button>
+                <button class="filter-btn magnetic-element" data-filter="corporate">Corporate</button>
+                <button class="filter-btn magnetic-element" data-filter="saas">SaaS</button>
+                <button class="filter-btn magnetic-element" data-filter="creative">Creative</button>
+            </div>
+            <div id="portfolio-grid" class="portfolio-grid"></div>
+        </section>
+
+        <section id="testimonials" class="testimonials-section content-section">
+             <h2 class="section-title anim-fade-in">Client Success Stories</h2>
+             <div id="testimonials-slider" class="testimonials-slider anim-fade-in"></div>
+        </section>
+
+        <section id="contact" class="contact-section content-section">
+            <h2 class="section-title anim-fade-in">Launch a Project</h2>
+            <p class="section-subtitle anim-fade-in">Have an idea? Let's make it a reality. Reach out and let's build the future together.</p>
+            <form id="contact-form" class="contact-form anim-fade-in">
+                <div class="form-group">
+                    <input type="text" id="name" name="name" required>
+                    <label for="name">Your Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" required>
+                    <label for="email">Your Email</label>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                    <label for="message">Your Message</label>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="cta-button magnetic-element">
+                        Transmit Message
+                        <span class="glow"></span>
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Shafin S. All rights reserved.</p>
+            <div class="footer-social">
+                <a href="#" class="magnetic-element">Twitter</a>
+                <a href="#" class="magnetic-element">LinkedIn</a>
+                <a href="#" class="magnetic-element">Github</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/split-type"></script>
+    
+    <script type="module">
+        // --- Data (Simulating JSON files) ---
+        const projectsData = [
+          { "id": 1, "title": "CyberCorp HQ", "client": "CyberCorp Inc.", "category": "corporate", "imageUrl": "https://placehold.co/600x400/821ee7/F5F5F5?text=CyberCorp", "tech": "Webflow, GSAP", "liveUrl": "#", "caseStudyUrl": "#" },
+          { "id": 5, "title": "Fintech Solutions", "client": "Apex Financial", "category": "corporate", "imageUrl": "https://placehold.co/600x400/1C1C1E/9373FF?text=Fintech", "tech": "Webflow, CMS, Finsweet", "liveUrl": "#", "caseStudyUrl": "#" },
+          { "id": 2, "title": "Neon Marketplace", "client": "Future Retail", "category": "e-commerce", "imageUrl": "https://placehold.co/600x400/9373FF/0F0F0F?text=Neon+Market", "tech": "Webflow, Shopify API", "liveUrl": "#", "caseStudyUrl": "#" },
+          { "id": 6, "title": "Artisan Collective", "client": "Handmade Goods", "category": "e-commerce", "imageUrl": "https://placehold.co/600x400/821ee7/F5F5F5?text=Artisan+Shop", "tech": "Webflow E-commerce", "liveUrl": "#", "caseStudyUrl": "#" },
+          { "id": 3, "title": "SaaS Platform UI", "client": "Innovate Solutions", "category": "saas", "imageUrl": "https://placehold.co/600x400/18A0FB/F5F5F5?text=SaaS+UI", "tech": "Webflow, React", "liveUrl": "#", "caseStudyUrl": "#" },
+          { "id": 7, "title": "Project Hub", "client": "Collab Inc.", "category": "saas", "imageUrl": "https://placehold.co/600x400/9373FF/0F0F0F?text=Project+Hub", "tech": "Webflow, Memberstack", "liveUrl": "#", "caseStudyUrl": "#" },
+          { "id": 4, "title": "Data Stream Visuals", "client": "Quantum Data", "category": "creative", "imageUrl": "https://placehold.co/600x400/1C1C1E/821ee7?text=Data+Stream", "tech": "Webflow, Three.js", "liveUrl": "#", "caseStudyUrl": "#" },
+          { "id": 8, "title": "Digital Art Gallery", "client": "Pixel Dreams", "category": "creative", "imageUrl": "https://placehold.co/600x400/18A0FB/F5F5F5?text=Art+Gallery", "tech": "Webflow, GSAP, CMS", "liveUrl": "#", "caseStudyUrl": "#" }
+        ];
+
+        const skillsData = [
+          { "name": "Webflow Development", "level": "95%" }, { "name": "GSAP Animation", "level": "90%" },
+          { "name": "Custom JavaScript", "level": "85%" }, { "name": "UI/UX Design & Figma", "level": "80%" },
+          { "name": "SEO & Performance", "level": "90%" }
+        ];
+
+        const servicesData = [
+          { "title": "Custom Webflow Builds", "description": "Pixel-perfect development from your Figma, Sketch, or Adobe XD designs into a fully responsive, high-performance Webflow site." },
+          { "title": "Advanced Animations", "description": "Implementation of complex interactions, page transitions, and scroll-based animations using Webflow's native tools and GSAP." },
+          { "title": "CMS & E-commerce", "description": "Full setup of Webflow's CMS and E-commerce platforms, creating dynamic and easily manageable content and online stores." },
+          { "title": "Performance & SEO", "description": "Enhancing website speed, search engine ranking, and overall performance to maximize reach and user retention." }
+        ];
+        
+        const testimonialsData = [
+          { "client": "John Carter, CEO of CyberCorp", "quote": "The website isn't just a design; it's a statement. The modern aesthetic was captured perfectly, and the performance is off the charts. Our user engagement has skyrocketed." },
+          { "client": "Dr. Aris Thorne, Innovate Solutions", "quote": "An absolute professional. The Webflow implementation was flawless, and the custom GSAP animations brought our SaaS platform's landing page to life. A true master of their craft." }
+        ];
+
+        // --- animations.js ---
+        function initAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            const heroTitle = new SplitType('.hero-title', { types: 'lines' });
+            gsap.from(heroTitle.lines, { y: '100%', opacity: 0, duration: 1, ease: 'power4.out', stagger: 0.1, delay: 0.5 });
+
+            const heroTagline = new SplitType('.hero-tagline', { types: 'lines' });
+            gsap.from(heroTagline.lines, { y: '100%', opacity: 0, duration: 1, ease: 'power4.out', stagger: 0.1, delay: 0.8 });
+            
+            gsap.from('.cta-button', { opacity: 0, y: 20, duration: 1, delay: 1.2 });
+
+            const fadeElements = document.querySelectorAll('.anim-fade-in');
+            fadeElements.forEach(el => {
+                gsap.to(el, {
+                    scrollTrigger: { trigger: el, start: "top 85%", toggleClass: "is-visible", once: true },
+                });
+            });
+            
+            const skillLevels = document.querySelectorAll('.skill-level');
+            skillLevels.forEach(skill => {
+                const width = skill.dataset.level;
+                gsap.fromTo(skill, { width: '0%' }, { 
+                    width: width, duration: 1.5, ease: 'power2.out',
+                    scrollTrigger: { trigger: skill.closest('.about-skills'), start: 'top 80%', once: true }
+                });
+            });
+
+            const magneticElements = document.querySelectorAll('.magnetic-element');
+            magneticElements.forEach(elem => {
+                elem.addEventListener('mousemove', function(e) {
+                    const rect = elem.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    gsap.to(elem, { x: x * 0.3, y: y * 0.3, duration: 0.8, ease: 'elastic.out(1, 0.3)' });
+                });
+                elem.addEventListener('mouseleave', function() {
+                    gsap.to(elem, { x: 0, y: 0, duration: 0.5, ease: 'power2.out' });
+                });
+            });
+        }
+
+        // --- portfolio.js ---
+        function initPortfolio() {
+            const grid = document.getElementById('portfolio-grid');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            if (!grid) return;
+
+            function displayProjects(projects) {
+                grid.innerHTML = '';
+                projects.forEach(project => {
+                    const card = document.createElement('div');
+                    card.className = 'project-card anim-fade-in';
+                    card.innerHTML = `
+                        <img src="${project.imageUrl}" alt="${project.title}" loading="lazy">
+                        <div class="project-info">
+                            <h3>${project.title}</h3>
+                            <p class="project-tech">${project.tech}</p>
+                            <div class="project-links">
+                                <a href="${project.liveUrl}" class="btn-live" target="_blank">View Live Site</a>
+                                <a href="${project.caseStudyUrl}" class="btn-case-study" target="_blank">Case Study</a>
+                            </div>
+                        </div>`;
+                    grid.appendChild(card);
+                });
+                
+                const newCards = grid.querySelectorAll('.project-card.anim-fade-in');
+                newCards.forEach(card => {
+                    gsap.to(card, {
+                        scrollTrigger: {
+                            trigger: card,
+                            start: "top 85%",
+                            toggleClass: "is-visible",
+                            once: true,
+                        },
+                    });
+                });
+
+                ScrollTrigger.refresh();
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    const filter = button.dataset.filter;
+                    const filteredProjects = (filter === 'all')
+                        ? projectsData
+                        : projectsData.filter(p => p.category.toLowerCase() === filter);
+                    displayProjects(filteredProjects);
+                });
+            });
+            displayProjects(projectsData);
+        }
+
+        // --- cursor.js ---
+        function initCursor() {
+            const cursor = document.querySelector('.interactive-cursor');
+            if (!cursor) return;
+            const interactiveElements = document.querySelectorAll('a, button, .magnetic-element');
+            document.addEventListener('mousemove', e => {
+                gsap.to(cursor, { duration: 0.3, x: e.clientX, y: e.clientY, ease: 'power3.out' });
+            });
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+        }
+        
+        // --- contact.js ---
+        function initContactForm() {
+            const form = document.getElementById('contact-form');
+            if (!form) return;
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.textContent = 'Transmitting...';
+                await new Promise(resolve => setTimeout(resolve, 1500)); 
+                submitButton.textContent = 'Message Sent!';
+                form.reset();
+                setTimeout(() => submitButton.textContent = 'Transmit Message', 3000);
+            });
+        }
+
+        // --- main.js (Initializer) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.querySelector('.preloader');
+            window.addEventListener('load', () => {
+                preloader.classList.add('hidden');
+            });
+
+            // Mobile Nav Toggle
+            const navToggle = document.querySelector('.nav-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            navToggle.addEventListener('click', () => {
+                document.body.classList.toggle('nav-open');
+                navLinks.classList.toggle('active');
+            });
+
+            // Populate dynamic content
+            const skillsContainer = document.getElementById('skills-container');
+            if(skillsContainer) skillsContainer.innerHTML = skillsData.map(skill => `
+                <div class="skill">
+                    <div class="skill-info">
+                        <span>${skill.name}</span>
+                        <span>${skill.level}</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-level" data-level="${skill.level}"></div></div>
+                </div>`).join('');
+
+            const servicesContainer = document.getElementById('services-container');
+            if(servicesContainer) servicesContainer.innerHTML = servicesData.map(service => `
+                <div class="service-card">
+                    <h3>${service.title}</h3>
+                    <p>${service.description}</p>
+                </div>`).join('');
+                
+            const testimonialsContainer = document.getElementById('testimonials-slider');
+            if(testimonialsContainer) testimonialsContainer.innerHTML = testimonialsData.map(item => `
+                <div class="testimonial-card">
+                    <p>"${item.quote}"</p>
+                    <span class="client-name">- ${item.client}</span>
+                </div>`).join('');
+
+            // Initialize modules
+            initPortfolio();
+            initAnimations();
+            initCursor();
+            initContactForm();
+        });
+    </script>
+</body>
+</html>
